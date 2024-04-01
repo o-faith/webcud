@@ -37,7 +37,7 @@ function bindElementToPV(elem, PV, precision, updateRate, processor, styler) {
 }
 
 function startConnection() {  
-  var socket = new WebSocket('ws://aosd.slac.stanford.edu/brews/');
+  var socket = new WebSocket('wss://aosd.slac.stanford.edu/brews/');
   
   socket.onopen = function() {
     console.log("Connection opened.");
@@ -57,7 +57,7 @@ function startConnection() {
   }
   socket.onmessage = function(event) {
     var json = JSON.parse(event.data);
-    console.log(json);
+    //console.log(json);
     if(json.value!==undefined){
       var monitor = pvMonitorMap[json.pv];
       var elem = monitor["elem"];

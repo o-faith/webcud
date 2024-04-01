@@ -3,11 +3,11 @@
 */
 
 //Get emittance data.  This is specialized code so that the opacity and color of the emittance number can be changed to reflect the age and quality of the emittance.
-var emittanceColorScale = d3.scale.quantile()
+var emittanceColorScale = d3.scaleQuantile()
 							.domain([0, 3])
 							.range(["#00CC22", "#FFFF00", "#FF4000"]);
 
-var ageOpacityScale = d3.scale.linear()
+var ageOpacityScale = d3.scaleLinear()
 						.domain([0, 16*60*60*1000]) //Make the values fade to 30% after 16 hours.
 						.range([1, 0.3])
 						.clamp(true);
@@ -25,7 +25,7 @@ d3.selectAll(".emittanceValue").datum(function() { return getDataAttributes(this
   });
 });
 
-var matchingColorScale = d3.scale.quantile()
+var matchingColorScale = d3.scaleQuantile()
 							.domain([1, 1.5])
 							.range(["#00CC22", "#FFFF00", "#FF4000"]);
 

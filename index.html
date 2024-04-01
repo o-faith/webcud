@@ -197,25 +197,16 @@
                             area: true,
                             yax_format: gdetFormatter
                         };
-                        var ipk_plot_params = {
-                            width: 800,
-                            full_width: true,
-                            top: 10,
-                            left: 70,
-                            bottom: 0,
-                            y_extended_ticks: true,
-                            height: 160,
-                            target: '#ipkhistory',
-                            x_accessor: 'date',
-                            y_accessor: 'val',
-                            min_y: 0,
-                            area: true,
-                            x_axis: false,
-                        };
                         function getGDETData() {
+                            var my_fixed_formatter = d3.format("0.1f");
                             var now = new Date();
                             var oneDayAgo = new Date(now - 60*60*24*1000);
-                            d3.json('http://lcls-archapp.slac.stanford.edu/retrieval/data/getDataForPVs.json?pv=mean_90(SIOC:SYS0:ML00:CALC000)&pv=mean_90(FBCK:FB04:LG01:S5DES)'+'&from='+oneDayAgo.toISOString()+'&to='+now.toISOString(), function(data) {
+                            fetch('http://lcls-archapp.slac.stanford.edu/retrieval/data/getDataForPVs.json?pv=mean_90(SIOC:SYS0:ML00:CALC000)&pv=mean_90(FBCK:FB04:LG01:S5DES)'+'&from='+oneDayAgo.toISOString()+'&to='+now.toISOString()).then((response) => {
+                                if (!response.ok) {
+                                    throw new Error("HTTP Error while fetching history data: " + response.status);
+                                }
+                                return response.json();
+                            }).then((data) => {
                                 var gdet_time_series = data[0].data.map(function(item) {
                                     return {"date": new Date(item.secs * 1000), "val": item.val};
                                 });
@@ -225,9 +216,8 @@
                                 gdet_plot_params.data = gdet_time_series;
                                 gdet_plot_params.min_x = gdet_time_series[0].date;
                                 MG.data_graphic(gdet_plot_params);
-                                //ipk_plot_params.data = ipk_time_series;
-                                //ipk_plot_params.min_x = ipk_time_series[0].date;
-                                //MG.data_graphic(ipk_plot_params);
+                            }).catch((error) => {
+                               console.log("Failed to parse history data: " + error.message); 
                             });
                         };
                         getGDETData();
