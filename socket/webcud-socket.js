@@ -44,7 +44,7 @@ d3.selectAll(".matchingValue").datum(function() { return getDataAttributes(this)
 
 //Get the amplification mode of the machine.  This has a custom data processor so that it can translate '1' into 'seeding' or other values into 'SASE'.
 
-bindElementToPV("#amplificationMode","SIOC:SYS0:ML00:CALC998",0,3000,function(val){
+bindElementToPV("#amplificationMode","XTAL:UNDH:2850:IN_ENCDR_MPS",0,3000,function(val){
 	if (val == "1") {
 		return "Seeded";
 	} else {
