@@ -89,44 +89,6 @@ function startConnection() {
       })
       .call(styler);
     }
-    /*
-    if (json.msg_type === "connection") {
-      return;
-    }
-    if (json.msg_type === "monitor") {
-      if(json.value!==undefined){
-        var monitor = pvMonitorMap[json.pv];
-        var elem = monitor["elem"];
-        var processor = monitor["processor"];
-        var precision = monitor["precision"];
-        var styler = monitor["styler"];
-  			d3.select(elem).datum(function(d){
-  				if (d === undefined) { d = {}; };
-  				json.value = processor(json.value);
-  				if (typeof json.value === 'number') {
-  					d.value = json.value.toFixed(d.precision);
-  				} else {
-  					d.value = json.value;
-  				}
-
-  				if (d.units === undefined) {
-  					if (json.units !== undefined) {
-  						d.units = json.units;
-  					}
-  				}
-  				return d;
-  			})
-  			.text(function(d,i) {
-  				if (d.units === undefined) {
-  					return d.value;
-  				} else {
-  					return d.value + " " + d.units;
-  				}
-  			})
-        .call(styler);
-  	  }
-    }
-    */
   };
 }
 
