@@ -252,7 +252,7 @@
                             var my_fixed_formatter = d3.format("0.1f");
                             var now = new Date();
                             var oneDayAgo = new Date(now - 60*60*24*1000);
-                            fetch('http://lcls-archapp.slac.stanford.edu/retrieval/data/getDataForPVs.json?pv=mean_90(SIOC:SYS0:ML00:CALC000)&pv=mean_90(FBCK:FB04:LG01:S5DES)'+'&from='+oneDayAgo.toISOString()+'&to='+now.toISOString()).then((response) => {
+                            fetch('https://aosd.slac.stanford.edu/archiver/retrieval/data/getDataForPVs.json?pv=mean_90(SIOC:SYS0:ML00:CALC000)&pv=mean_90(FBCK:FB04:LG01:S5DES)'+'&from='+oneDayAgo.toISOString()+'&to='+now.toISOString()).then((response) => {
                                 if (!response.ok) {
                                     throw new Error("HTTP Error while fetching history data: " + response.status);
                                 }
