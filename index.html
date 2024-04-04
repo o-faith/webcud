@@ -152,24 +152,69 @@
 							<span id="eLoss" class="cell PVmonitor" data-pv="PHYS:SYS0:1:ELOSSRESULT"></span>
 						</div>
 					</div>
-					<!--
+				</div>
+				<div class="col-xs-12 col-sm-6" id="program"><!-- Program Status -->
 					<div class="cell-label" style="padding-top: 30px">
 						<h1>Scheduled Program</h1>
 					</div>
-					<div class="row">
-						<div class="span9">
-							<h3>Deliver to MEC for photon MD and instrument checkout.</h3>
-						</div>
-					</div>
-					<div class="row">
-						<div class="span9">
-							<h2 id="abortMessage" style="visibility: hidden;">BYKICK aborting every <span class="cell PVmonitor" id="abortRate" data-pv="IOC:IN20:EV01:BYKIK_ABTPRD" data-units=""></span> pulses.</h2>
-							<h2 id="burstMessage" style="visibility: hidden;">Burst Mode is enabled, users requesting <span class="cell PVmonitor" id="burstRate" data-pv="EVNT:SYS0:1:LCLSBURSRATE"></span>.</h2>
-						</div>
-					</div>
-                    -->
-				</div>
-			</div>
+				</div><!-- end program status -->
+				<script>
+					const dateFormatter = d3.timeFormat("%b %d %H:%M");
+					function getProgramInfo() {
+						fetch('http://localhost:8000/events/').then((response) => {
+							if (!response.ok) {
+								throw new Error("HTTP Error while fetching history data: " + response.status);
+							}
+							return response.json();
+						}).then((data) => {
+							console.log(data);
+							d3.select("#program").selectAll("div.row")
+							  .data(data)
+							  .enter()
+							  	.append(function(d, i, nodes) {
+									if (i < 3) {
+										var progdiv = document.createElement("div");
+										progdiv.className = "row";
+										var timediv = document.createElement("div");
+										timediv.className = "col-xs-3 col-sm-3 col-md-2";
+										var timeh3 = document.createElement("h3");
+										const startDate = Date.parse(d['start']);
+										var dateString = dateFormatter(startDate);
+										if (startDate < Date.now()) {
+											dateString = "Now"
+										}
+										var timetext = document.createTextNode(dateString);
+										timeh3.appendChild(timetext);
+										timediv.appendChild(timeh3);
+										progdiv.appendChild(timediv);
+										var descdiv = document.createElement("div");
+										descdiv.className = "col-xs-9 col-sm-9 col-md-10";
+										var desch3 = document.createElement("h3");
+										if (d['hutch'] === null) {
+											var descString = d['description'];
+											var desc = document.createTextNode(descString);
+											desch3.appendChild(desc);
+										} else {
+											desch3.insertAdjacentText("afterbegin", "Deliver to ");
+											var hutchSpan = document.createElement("span");
+											var hutchStyle = `background-color: ${d['hutch']['color']}; padding: 0px 3px 0px 3px; border-radius: 7px; color: ${d['hutch']['text_color']}`;
+											hutchSpan.setAttribute("style", hutchStyle);
+											hutchSpan.insertAdjacentText("afterbegin", d['hutch']['name']);
+											desch3.appendChild(hutchSpan);
+										}
+										descdiv.appendChild(desch3);
+										progdiv.appendChild(descdiv);
+										return progdiv;
+									}
+								  });
+						}).catch((error) => {
+						   console.log("Failed to parse history data: " + error.message); 
+						});
+					}
+					getProgramInfo();
+					setInterval(function() { getProgramInfo(); }, 120000);
+				</script>
+			</div><!-- end grid of data stuff -->
 			<div class="row"><!-- graph row begin -->
 				<div class="col-xs-12" id="history">
 					<div class="cell-label">
