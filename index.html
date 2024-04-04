@@ -203,6 +203,12 @@
 											desch3.appendChild(hutchSpan);
 										}
 										descdiv.appendChild(desch3);
+										if (d['config'] !== null) {
+											console.log("CONF!")
+											var confSpan = document.createElement("span");
+											confSpan.insertAdjacentText("afterbegin", d['config']);
+											descdiv.appendChild(confSpan);
+										}
 										progdiv.appendChild(descdiv);
 										return progdiv;
 									}
