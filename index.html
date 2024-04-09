@@ -161,7 +161,7 @@
 				<script>
 					const dateFormatter = d3.timeFormat("%b %d %H:%M");
 					function getProgramInfo() {
-						fetch('https://aosd.slac.stanford.edu/program_calendar/events/').then((response) => {
+						fetch('https://aosd.slac.stanford.edu/program_calendar/timetable/?line=HXR&non_user_events=NC').then((response) => {
 							if (!response.ok) {
 								throw new Error("HTTP Error while fetching history data: " + response.status);
 							}
@@ -171,14 +171,14 @@
 							d3.select("#program").selectAll("div.row")
 							  .data(data)
 							  .enter()
-							  	.append(function(d, i, nodes) {
+							  	.append(function(ds, i, nodes) {
 									if (i < 3) {
 										var progdiv = document.createElement("div");
 										progdiv.className = "row";
 										var timediv = document.createElement("div");
 										timediv.className = "col-xs-3 col-sm-3 col-md-2";
 										var timeh3 = document.createElement("h3");
-										const startDate = Date.parse(d['start']);
+										const startDate = Date.parse(ds[0]['start']);
 										var dateString = dateFormatter(startDate);
 										if (startDate < Date.now()) {
 											dateString = "Now"
@@ -187,29 +187,31 @@
 										timeh3.appendChild(timetext);
 										timediv.appendChild(timeh3);
 										progdiv.appendChild(timediv);
-										var descdiv = document.createElement("div");
-										descdiv.className = "col-xs-9 col-sm-9 col-md-10";
-										var desch3 = document.createElement("h3");
-										if (d['hutch'] === null) {
-											var descString = d['description'];
-											var desc = document.createTextNode(descString);
-											desch3.appendChild(desc);
-										} else {
-											desch3.insertAdjacentText("afterbegin", "Deliver to ");
-											var hutchSpan = document.createElement("span");
-											var hutchStyle = `background-color: ${d['hutch']['color']}; padding: 0px 3px 0px 3px; border-radius: 7px; color: ${d['hutch']['text_color']}`;
-											hutchSpan.setAttribute("style", hutchStyle);
-											hutchSpan.insertAdjacentText("afterbegin", d['hutch']['name']);
-											desch3.appendChild(hutchSpan);
+										for (d of ds) {
+											var descdiv = document.createElement("div");
+											descdiv.className = "col-xs-9 col-sm-9 col-md-4";
+											var desch3 = document.createElement("h3");
+											if (d['hutch'] === null) {
+												var descString = d['description'];
+												var desc = document.createTextNode(descString);
+												desch3.appendChild(desc);
+											} else {
+												desch3.insertAdjacentText("afterbegin", "Deliver to ");
+												var hutchSpan = document.createElement("span");
+												var hutchStyle = `background-color: ${d['hutch']['color']}; padding: 0px 3px 0px 3px; border-radius: 7px; color: ${d['hutch']['text_color']}`;
+												hutchSpan.setAttribute("style", hutchStyle);
+												hutchSpan.insertAdjacentText("afterbegin", d['hutch']['name']);
+												desch3.appendChild(hutchSpan);
+											}
+											descdiv.appendChild(desch3);
+											if (d['config'] !== null) {
+												console.log("CONF!")
+												var confSpan = document.createElement("span");
+												confSpan.insertAdjacentText("afterbegin", d['config']);
+												descdiv.appendChild(confSpan);
+											}
+											progdiv.appendChild(descdiv);
 										}
-										descdiv.appendChild(desch3);
-										if (d['config'] !== null) {
-											console.log("CONF!")
-											var confSpan = document.createElement("span");
-											confSpan.insertAdjacentText("afterbegin", d['config']);
-											descdiv.appendChild(confSpan);
-										}
-										progdiv.appendChild(descdiv);
 										return progdiv;
 									}
 								  });
