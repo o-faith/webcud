@@ -196,8 +196,8 @@
 					<script>
                         var fixed_formatter = d3.format("0.1f");
                         function gdetFormatter(num) {
-                          console.log(fixed_formatter(num) + "mJ");
-                          return fixed_formatter(num) + "mJ";
+                          console.log(fixed_formatter(num) + "uJ");
+                          return fixed_formatter(num) + "uJ";
                         }
                         var gdet_plot_params = {
                             width: 800,
@@ -218,14 +218,14 @@
                             var my_fixed_formatter = d3.format("0.1f");
                             var now = new Date();
                             var oneDayAgo = new Date(now - 60*60*24*1000);
-                            fetch('https://aosd.slac.stanford.edu/archiver/retrieval/data/getDataForPVs.json?pv=mean_90(EM1K0:GMD:HPS:AvgPulseIntensity)'+'&from='+oneDayAgo.toISOString()+'&to='+now.toISOString()).then((response) => {
+                            fetch('https://aosd.slac.stanford.edu/archiver/retrieval/data/getDataForPVs.json?pv=median_90(EM1K0:GMD:HPS:AvgPulseIntensity)'+'&from='+oneDayAgo.toISOString()+'&to='+now.toISOString()).then((response) => {
                                 if (!response.ok) {
                                     throw new Error("HTTP Error while fetching history data: " + response.status);
                                 }
                                 return response.json();
                             }).then((data) => {
                                 var gdet_time_series = data[0].data.map(function(item) {
-                                    return {"date": new Date(item.secs * 1000), "val": item.val};
+                                    return {"date": new Date(item.secs * 1000), "val": item.val * 1000};
                                 });
                                 gdet_plot_params.data = gdet_time_series;
                                 gdet_plot_params.min_x = gdet_time_series[0].date;
