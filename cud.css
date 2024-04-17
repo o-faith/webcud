@@ -109,3 +109,7 @@ div.cell-label {
 	-moz-animation-direction: alternate;
 	-moz-animation-timing-function: ease-in-out;
 }
+
+div.progrow {
+  border-bottom: 1px solid #555;
+}

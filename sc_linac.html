@@ -127,60 +127,64 @@
 					function getProgramInfo() {
 						fetch('https://aosd.slac.stanford.edu/program_calendar/timetable/?line=SXR&non_user_events=SC').then((response) => {
 							if (!response.ok) {
-								throw new Error("HTTP Error while fetching history data: " + response.status);
+								throw new Error("HTTP Error while fetching program data: " + response.status);
 							}
 							return response.json();
 						}).then((data) => {
-							console.log(data);
 							d3.select("#program").selectAll("div.row")
 							  .data(data)
 							  .enter()
-								  .append(function(ds, i, nodes) {
+								  .append(function(d, i, nodes) {
 									if (i < 3) {
 										var progdiv = document.createElement("div");
 										progdiv.className = "row";
-										for (d of ds) {
-											var timediv = document.createElement("div");
-											timediv.className = "col-xs-3 col-sm-3 col-md-2";
-											var timeh3 = document.createElement("h3");
-											const startDate = Date.parse(d['start']);
-											var dateString = dateFormatter(startDate);
-											if (startDate < Date.now()) {
-												dateString = "Now"
-											}
-											var timetext = document.createTextNode(dateString);
-											timeh3.appendChild(timetext);
-											timediv.appendChild(timeh3);
-											progdiv.appendChild(timediv);
+										var inner = document.createElement("div");
+										inner.className = "col-xs-12 col-sm-12 col-md-12 inner";
+										progdiv.appendChild(inner);
+										var progrow = document.createElement("div");
+										progrow.className = "row progrow";
+										inner.appendChild(progrow)
+										var timediv = document.createElement("div");
+										timediv.className = "col-xs-3 col-sm-3 col-md-2";
+										var timeh3 = document.createElement("h3");
+										const startDate = Date.parse(d['start']);
+										var dateString = dateFormatter(startDate);
+										if (startDate < Date.now()) {
+											dateString = "Now"
+										}
+										var timetext = document.createTextNode(dateString);
+										timeh3.appendChild(timetext);
+										timediv.appendChild(timeh3);
+										progrow.appendChild(timediv);
+										for (event of d["events"]) {
 											var descdiv = document.createElement("div");
-											descdiv.className = "col-xs-9 col-sm-9 col-md-10";
+											descdiv.className = "col-xs-9 col-sm-9 col-md-3";
 											var desch3 = document.createElement("h3");
-											if (d['hutch'] === null) {
-												var descString = d['description'];
+											if (event['hutch'] === null) {
+												var descString = event['description'];
 												var desc = document.createTextNode(descString);
 												desch3.appendChild(desc);
 											} else {
 												desch3.insertAdjacentText("afterbegin", "Deliver to ");
 												var hutchSpan = document.createElement("span");
-												var hutchStyle = `background-color: ${d['hutch']['color']}; padding: 0px 3px 0px 3px; border-radius: 7px; color: ${d['hutch']['text_color']}`;
+												var hutchStyle = `background-color: ${event['hutch']['color']}; padding: 0px 3px 0px 3px; border-radius: 7px; color: ${event['hutch']['text_color']}`;
 												hutchSpan.setAttribute("style", hutchStyle);
-												hutchSpan.insertAdjacentText("afterbegin", d['hutch']['name']);
+												hutchSpan.insertAdjacentText("afterbegin", event['hutch']['name']);
 												desch3.appendChild(hutchSpan);
 											}
 											descdiv.appendChild(desch3);
-											if (d['config'] !== null) {
-												console.log("CONF!")
+											if (event['config'] !== null) {
 												var confSpan = document.createElement("span");
-												confSpan.insertAdjacentText("afterbegin", d['config']);
+												confSpan.insertAdjacentText("afterbegin", event['config']);
 												descdiv.appendChild(confSpan);
 											}
-											progdiv.appendChild(descdiv);
+											progrow.appendChild(descdiv);
 										}
 										return progdiv;
 									}
 								  });
 						}).catch((error) => {
-						   console.log("Failed to parse history data: " + error.message); 
+						   console.log("Failed to parse program data: " + error.message); 
 						});
 					}
 					getProgramInfo();
