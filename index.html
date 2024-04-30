@@ -157,74 +157,159 @@
 					<div class="cell-label" style="padding-top: 30px">
 						<h1>Scheduled Program</h1>
 					</div>
+					<!--
+					<div class="row program" id="program-template">
+						<div class="col-xs-12 col-sm-12 col-md-12 inner">
+							<div class="row innerprogrow">
+								<div class="col-xs-3 col-sm-3 col-md-2 progtime"><h3>Now</h3></div>
+								<div class="col-xs-9 col-sm-9 col-md-3 proginfo"><h3>Hello</h3></div>
+								<div class="col-xs-9 col-sm-9 col-md-3 proginfo"><h3>Another One</h3></div>
+							</div>
+						</div>
+					</div>
+					-->
+				<div id="lastUpdated"></div>
 				</div><!-- end program status -->
 				<script>
 					const dateFormatter = d3.timeFormat("%b %d %H:%M");
 					function getProgramInfo() {
-						fetch('https://aosd.slac.stanford.edu/program_calendar/timetable/?line=HXR&non_user_events=NC').then((response) => {
+						fetch('https://aosd.slac.stanford.edu/program_calendar/timetable/?line=HXR&non_user_events=NC&limit=3').then((response) => {
 							if (!response.ok) {
 								throw new Error("HTTP Error while fetching program data: " + response.status);
 							}
 							return response.json();
 						}).then((data) => {
-							d3.select("#program").selectAll("div.row")
-							  .data(data)
-							  .enter()
-							  	.append(function(d, i, nodes) {
-									if (i < 3) {
-										var progdiv = document.createElement("div");
-										progdiv.className = "row";
-										var inner = document.createElement("div");
-										inner.className = "col-xs-12 col-sm-12 col-md-12 inner";
-										progdiv.appendChild(inner);
-										var progrow = document.createElement("div");
-										progrow.className = "row progrow";
-										inner.appendChild(progrow)
-										var timediv = document.createElement("div");
-										timediv.className = "col-xs-3 col-sm-3 col-md-2";
-										var timeh3 = document.createElement("h3");
-										const startDate = Date.parse(d['start']);
-										var dateString = dateFormatter(startDate);
-										if (startDate < Date.now()) {
-											dateString = "Now"
-										}
-										var timetext = document.createTextNode(dateString);
-										timeh3.appendChild(timetext);
-										timediv.appendChild(timeh3);
-										progrow.appendChild(timediv);
-										for (event of d["events"]) {
-											var descdiv = document.createElement("div");
-											descdiv.className = "col-xs-9 col-sm-9 col-md-3";
-											var desch3 = document.createElement("h3");
-											if (event['hutch'] === null) {
-												var descString = event['description'];
-												var desc = document.createTextNode(descString);
-												desch3.appendChild(desc);
+							var time_rows = d3.select("#program").selectAll("div.row")
+							  .data(data, function(d){ return d['start'] + d['end']; })
+							  .join(
+								function(enter){
+									var inner_prog_row = enter.append("div")
+									  .classed("col-xs-12 col-sm-12 col-md-12 inner", true)
+									  .append("div")
+									    .classed("row innerprogrow", true);
+									inner_prog_row.append("div")
+									  .classed("col-xs-3 col-sm-3 col-md-2 progtime", true)
+									  .append("h3")
+									  .text(function(d, i, nodes) {
+										  const startDate = Date.parse(d['start']);
+										  var dateString = dateFormatter(startDate);
+										  if (startDate < Date.now()) {
+											  dateString = "Now"
+										  }
+										  return dateString;
+									  });
+									  return inner_prog_row;
+								},
+								function(update){
+									update.select("div.innerprogrow div.progtime").selectAll("h3")
+									  .text(function(d, i, nodes) {
+										  const startDate = Date.parse(d['start']);
+										  var dateString = dateFormatter(startDate);
+										  if (startDate < Date.now()) {
+											  dateString = "Now"
+										  }
+										  return dateString;
+									  });
+									  return update;
+								},
+								function(exit){
+									exit.remove();
+										//.remove();
+								});
+							
+							var prog_cells = time_rows.selectAll("div.proginfo")
+							  .data(function(d) { return d['events']; }, function(d){ return d['url']; })
+							  .join(
+								  function(enter){
+									  var prog_info_div = enter.append("div")
+										.classed("col-xs-9 col-sm-9 col-md-3 proginfo", true);
+										
+									  prog_info_div.append("h3")
+										.text(function(d, i, nodes) {
+											if (d['hutch'] === null) {
+												return d['description'];
 											} else {
-												desch3.insertAdjacentText("afterbegin", "Deliver to ");
-												var hutchSpan = document.createElement("span");
-												var hutchStyle = `background-color: ${event['hutch']['color']}; padding: 0px 3px 0px 3px; border-radius: 7px; color: ${event['hutch']['text_color']}`;
-												hutchSpan.setAttribute("style", hutchStyle);
-												hutchSpan.insertAdjacentText("afterbegin", event['hutch']['name']);
-												desch3.appendChild(hutchSpan);
+												return "Deliver to ";
 											}
-											descdiv.appendChild(desch3);
-											if (event['config'] !== null) {
-												var confSpan = document.createElement("span");
-												confSpan.insertAdjacentText("afterbegin", event['config']);
-												descdiv.appendChild(confSpan);
-											}
-											progrow.appendChild(descdiv);
-										}
-										return progdiv;
-									}
+										}).append("span")
+											  .classed("hutch",true)
+											  .style("background-color", function(d) {
+												  if (d['hutch'] !== null) {
+													  return d['hutch']['color'];
+												  }
+												  return null;
+											  })
+											  .style("padding", "0px 3px 0px 3px")
+											  .style("border-radius", "7px")
+											  .style("color", function(d) {
+												  if (d['hutch'] !== null) {
+												  	return d['hutch']['text_color'];
+												  }
+												  return null;
+											  })
+											  .text(function(d) {
+												  if (d['hutch'] !== null) {
+													  return d['hutch']['name'];
+												  }
+												  return null;
+											  });
+										prog_info_div.append("span")
+											.classed("config", true)
+											.text(function(d){
+												if (d['config'] !== null) {
+													return d['config'];
+												}
+												return null;
+											});
+										return prog_info_div;
+									  	},
+									  function(update){
+										  update.select("div.innerprogrow div.proginfo").selectAll("h3")
+											.text(function(d, i, nodes) {
+												if (d['hutch'] === null) {
+													return d['description'];
+												} else {
+													return "Deliver to ";
+												}
+											});
+										  update.select("div.innerprogrow").selectAll("span.hutch")
+										  	.style("background-color", function(d) {
+													if (d['hutch'] !== null) {
+														return d['hutch']['color'];
+													}
+													return null;
+												})
+												.style("color", function(d) {
+													if (d['hutch'] !== null) {
+														return d['hutch']['text_color'];
+													}
+													return null;
+												})
+												.text(function(d) {
+													if (d['hutch'] !== null) {
+														return d['hutch']['name'];
+													}
+													return null;
+												});
+											update.select("div.innerprogrow").selectAll("span.config")
+												.text(function(d){
+													if (d['config'] !== null) {
+														return d['config'];
+													}
+													return null;
+												});
+											return update;
+									  },
+								  	  function(exit){
+											return exit.remove();
+									});
+								  }).catch((error) => {
+									 console.log("Failed to parse program data: " + error.message); 
 								  });
-						}).catch((error) => {
-						   console.log("Failed to parse program data: " + error.message); 
-						});
+						d3.select("#lastUpdated").text(`Last updated: ${dateFormatter(Date.now())}`);
 					}
 					getProgramInfo();
-					setInterval(function() { getProgramInfo(); }, 120000);
+					setInterval(function() { getProgramInfo(); }, 12000);
 				</script>
 			</div><!-- end grid of data stuff -->
 			<div class="row"><!-- graph row begin -->
