@@ -173,7 +173,7 @@
 				<script>
 					const dateFormatter = d3.timeFormat("%b %d %H:%M");
 					function getProgramInfo() {
-						fetch('https://aosd.slac.stanford.edu/program_calendar/timetable/?line=HXR&non_user_events=NC&limit=3').then((response) => {
+						fetch('https://aosd.slac.stanford.edu/program_calendar/timetable/?machine=NC&limit=3').then((response) => {
 							if (!response.ok) {
 								throw new Error("HTTP Error while fetching program data: " + response.status);
 							}
