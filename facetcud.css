@@ -25,7 +25,7 @@ div.cell-label {
   font-weight: bold;
 }
 
-.topright /*SLAC Logo*/
+.topright /*FACET Logo*/
 {
     position: absolute;
     top: 0;
@@ -33,7 +33,7 @@ div.cell-label {
     width: 40%;
     height: auto;
     padding-right: 20px;
-    padding-top: 25px;
+    padding-top: 20px;
 }
 
 #emittanceTable {
