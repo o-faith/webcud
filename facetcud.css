@@ -1,0 +1,126 @@
+body {
+  background-color: #001923;
+  color: #FFF;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  text-rendering: optimizelegibility;
+}
+
+h1 {
+  font-weight: bold;
+}
+
+div.row {
+  margin-bottom: 20px;
+}
+
+div.cell-label {
+  margin: 20px 0 5px 0px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 2px;
+  font-size: 18px;
+}
+
+.cell {
+  font-size: 36px;
+  font-weight: bold;
+}
+
+.topright /*SLAC Logo*/
+{
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40%;
+    height: auto;
+    padding-right: 20px;
+    padding-top: 25px;
+}
+
+#emittanceTable {
+  margin-top: 10px;
+}
+
+#emittanceTable th {
+	font-size: 18px;
+	line-height: 20px;
+	vertical-align: bottom;
+}
+
+#emittanceTable td {
+	font-size: 36px;
+	line-height: 40px;
+  font-weight: bold;
+}
+
+@media (max-width: 1200px) {
+  div.cell-label {
+    font-size: 15px;
+  }
+  .cell {
+    font-size: 28px;
+  }
+  #emittanceTable th {
+    font-size: 15px;
+  }
+  #emittanceTable td {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  #emittanceTable td {
+    font-size: 24px;
+  }
+}
+
+@keyframes errorpulse {
+  0% {
+    opacity: .5;
+  }
+
+  100% {
+    opacity: 1.0;
+  }
+}
+
+@-webkit-keyframes errorpulse {
+  0% {
+    opacity: .5;
+  }
+
+  100% {
+    opacity: 1.0;
+  }
+}
+
+@-moz-keyframes errorpulse {
+  0% {
+    opacity: .5;
+  }
+
+  100% {
+    opacity: 1.0;
+  }
+}
+
+.errorpulse {
+	animation-duration: 1s;
+	animation-name: errorpulse;
+	animation-iteration-count: infinite;
+	animation-direction: alternate;
+	animation-timing-function: ease-in-out;
+	-webkit-animation-duration: 1s;
+	-webkit-animation-name: errorpulse;
+	-webkit-animation-iteration-count: infinite;
+	-webkit-animation-direction: alternate;
+	-webkit-animation-timing-function: ease-in-out;
+	-moz-animation-duration: 1s;
+	-moz-animation-name: errorpulse;
+	-moz-animation-iteration-count: infinite;
+	-moz-animation-direction: alternate;
+	-moz-animation-timing-function: ease-in-out;
+}
+
+div.progrow {
+  border-bottom: 1px solid #555;
+}
