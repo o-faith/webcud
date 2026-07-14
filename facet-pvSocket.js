@@ -4,7 +4,7 @@
 
 //Get emittance data.  This is specialized code so that the opacity and color of the emittance number can be changed to reflect the age and quality of the emittance.
 var emittanceColorScale = d3.scaleQuantile()
-							.domain([0, 3])
+							.domain([0, 8])
 							.range(["#00CC22", "#FFFF00", "#FF4000"]);
 
 var ageOpacityScale = d3.scaleLinear()
