@@ -52,6 +52,7 @@ div.cell-label {
 {
   font-weight: bold;
   text-align: center;
+  padding-top: 10px;
 }
 
 #emittanceTable {
