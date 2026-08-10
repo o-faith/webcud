@@ -48,6 +48,12 @@ div.cell-label {
     padding-top: 25px;
 }
 
+.graph-label
+{
+  font-weight: bold;
+  text-align: center;
+}
+
 #emittanceTable {
   margin-top: 10px;
 }

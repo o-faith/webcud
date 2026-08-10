@@ -1,8 +1,10 @@
-
+/*  webcud-socket.js
+    This is all code that is particular to the LCLS Web CUD (Websocket Edition), and not useful for general applications
+*/
 
 //Get emittance data.  This is specialized code so that the opacity and color of the emittance number can be changed to reflect the age and quality of the emittance.
-var emittanceColorScale = d3.scaleQuantile() //for emittance
-							.domain([0, 15]) //change from [0,3] to [0,15]
+var emittanceColorScale = d3.scaleQuantile()
+							.domain([0, 8])
 							.range(["#00CC22", "#FFFF00", "#FF4000"]);
 
 var ageOpacityScale = d3.scaleLinear()
@@ -23,8 +25,8 @@ d3.selectAll(".emittanceValue").datum(function() { return getDataAttributes(this
   });
 });
 
-var matchingColorScale = d3.scaleQuantile() //for bmag
-							.domain([1, 3]) //changed from [1,1.5] to [1,3]
+var matchingColorScale = d3.scaleQuantile()
+							.domain([1, 1.5])
 							.range(["#00CC22", "#FFFF00", "#FF4000"]);
 
 d3.selectAll(".matchingValue").datum(function() { return getDataAttributes(this); }).each(function(d) {
@@ -40,15 +42,15 @@ d3.selectAll(".matchingValue").datum(function() { return getDataAttributes(this)
   });
 });
 
-//Get the l2 compression mode of the machine.  This has a custom data processor so that it can translate '1.0' into 'Overcompressed' and '0.0' into 'Undercompressed'.
-bindElementToPV("#L2CompresisonMode","PHYS:SYS1:1:F2LFB_BC14BL_OVRCMP",0,3000,function(val){
-	if (val == "1.0") {
-		return "Overcompressed";
-	} else if(val == "0.0") {
-		return "Undercompressed";
+//Get the amplification mode of the machine.  This has a custom data processor so that it can translate '1' into 'seeding' or other values into 'SASE'.
+
+bindElementToPV("#amplificationMode","XTAL:UNDH:2850:IN_ENCDR_MPS",0,3000,function(val){
+	if (val == "1") {
+		return "Seeded";
+	} else {
+		return "SASE";
 	}
 });
-
 
 /*
 //Get the BYKIK abort state, and show a message explaining it.
@@ -100,25 +102,5 @@ d3.select("#BC2PeakCurrent").datum(function() { return getDataAttributes(this); 
 		return val;
 	});
 });
-
-//converts int array of ascii codes into a string
-d3.select("#waisttarget").datum(function() { return getDataAttributes(this); }).each(function(d) {
-	bindElementToPV(this,d.pv,d.precision,2000,function(val){
-		let asciiCodes = val.filter(code => code >= 32 && code <= 126); //filter out non-printable ASCII codes
-		let result = String.fromCharCode(...asciiCodes); //turns it into IPWS1
-		return result;
-	});
-});
-
-//currently returns first int of array
-// d3.select("#waisttarget").datum(function() { return getDataAttributes(this); }).each(function(d) {
-// 	bindElementToPV(this,d.pv,d.precision,2000,function(val){
-// 		// let asciiCodes = val;
-// 		// return asciiCodes[0];
-// 		return val[0];
-// 	});
-// });
-
-
 
 startConnection();

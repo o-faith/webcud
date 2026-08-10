@@ -97,34 +97,46 @@
 						</div>
 						<div class="span3">
 							<div class="page-header" style="padding-bottom:2px; margin-bottom:12px;">
-								<h4>L2 Phase</h4>
+								<h4>BC14 Energy</h4>
 							</div>
-							<h1><span id="L2Phase"  class="PVmonitor" data-pv="SIOC:SYS0:ML00:AO487" data-units="&deg" data-precision="1"></span></h1>
+							<h1><span id="BC14Energy"  class="PVmonitor" data-pv="BEND:LI14:720:BDES" data-units="&deg" data-precision="1"></span></h1>
 						</div>
 						<div class="span3">
 							<div class="page-header" style="padding-bottom:2px; margin-bottom:12px;">
-								<h4>BC2 Energy</h4>
+								<h4>L2 Phase</h4>
 							</div>
-							<h1><span id="BC2Energy" class="PVmonitor" data-pv="SIOC:SYS0:ML00:AO489" data-precision="1"></span></h1>
+							<h1><span id="L2Phase" class="PVmonitor" data-pv="LI12:SBST:1:PDES" data-precision="1"></span></h1>
+						</div>
+						<div class="span3">
+							<div class="page-header" style="padding-bottom:2px; margin-bottom:12px;">
+								<h4>L2 Compresison Mode</h4>
+							</div>
+							<h1><span id="L2CompresisonMode" class="PVmonitor" data-pv="PHYS:SYS1:1:F2LFB_BC14BL_OVRCMP" data-precision="1"></span></h1>
 						</div>
 					</div>
 				</div>
-				<div class="span9 offset1"><!-- FEL Status -->
+				<div class="span9 offset1"><!-- S20 Setup Parameters -->
 					<div class="page-header">
-						<h1>FEL Status</h1>
+						<h1>S20 Setup Parameters</h1>
 					</div>
 					<div class="row">
 						<div class="span3">
 							<div class="page-header" style="padding-bottom:2px; margin-bottom:12px;">
-								<h4>FEL Pulse Energy</h4>
+								<h4>Waist Target</h4>
 							</div>
-							<h1 class="bigfont"><span id="GDETEnergy" class="PVmonitor" data-pv="SIOC:SYS0:ML00:CALC000" data-precision="1"></span></h1>
+							<h1 class="bigfont"><span id="waisttarget" class="PVmonitor" data-pv="SIOC:SYS1:ML00:CA018" data-precision="1"></span></h1>
 						</div>
 						<div class="span3">
 							<div class="page-header" style="padding-bottom:2px; margin-bottom:12px;">
-								<h4>Photon Energy</h4>
+								<h4>Beta X</h4>
 							</div>
-							<h1 class="bigfont"><span id="photonEnergy" class="PVmonitor" data-pv="SIOC:SYS0:ML00:AO627" data-precision="1"></span></h1>
+							<h1 class="bigfont"><span id="betax" class="PVmonitor" data-pv="SIOC:SYS1:ML02:AO936" data-precision="1"></span></h1>
+						</div>
+						<div class="span3">
+							<div class="page-header" style="padding-bottom:2px; margin-bottom:12px;">
+								<h4>Beta Y</h4>
+							</div>
+							<h1 class="bigfont"><span id="betay" class="PVmonitor" data-pv="SIOC:SYS1:ML02:AO937" data-precision="1"></span></h1>
 						</div>
 						<div class="span3">
 							<div class="page-header" style="padding-bottom:2px; margin-bottom:12px;">
@@ -136,21 +148,75 @@
 					<div class="row">
 						<div class="span3">
 							<div class="page-header" style="padding-bottom:2px; margin-bottom:12px;">
-								<h4>Pulse Length</h4>
+								<h4>S Offset X</h4>
 							</div>
-							<h1><span id="pulseLength" class="PVmonitor" data-pv="SIOC:SYS0:ML00:AO820"></span></h1>
+							<h1><span id="soffsetx" class="PVmonitor" data-pv="SIOC:SYS1:ML02:AO938"></span></h1>
 						</div>
 						<div class="span3">
 							<div class="page-header" style="padding-bottom:2px; margin-bottom:12px;">
-								<h4>Energy Loss</h4>
+								<h4>S Offset Y</h4>
 							</div>
-							<h1><span id="eLoss" class="PVmonitor" data-pv="SIOC:SYS0:ML00:AO556"></span></h1>
+							<h1><span id="soffsety" class="PVmonitor" data-pv="SIOC:SYS1:ML02:AO939"></span></h1>
 						</div>
 						<div class="span3">
 							<div class="page-header" style="padding-bottom:2px; margin-bottom:12px;">
-								<h4>Amplification Mode</h4>
+								<h4>XTCAV Blen</h4>
 							</div>
-							<h1><span id="amplificationMode" data-pv="SIOC:SYS0:ML00:CALC998" data-units=""></span></h1>
+							<h1><span id="xtcavblen" class="PVmonitor" data-pv="CAMR:LI20:107:BLEN" data-units=""></span></h1>
+						</div>
+					</div>
+					<div class="row">
+						<div class="span3">
+							<div class="page-header" style="padding-bottom:2px; margin-bottom:12px;">
+								<h4>IPWS1 X Spot Size</h4>
+							</div>
+							<h1><span id="ipws1xspotsize" class="PVmonitor" data-pv="WIRE:LI20:3179:XRMS"></span></h1>
+						</div>
+						<div class="span3">
+							<div class="page-header" style="padding-bottom:2px; margin-bottom:12px;">
+								<h4>IPWS1 Y Spot Size</h4>
+							</div>
+							<h1><span id="ipws1yspotsize" class="PVmonitor" data-pv="WIRE:LI20:3179:YRMS"></span></h1>
+						</div>
+					</div>
+					<div class="row">
+						<div class="span3">
+							<div class="page-header" style="padding-bottom:2px; margin-bottom:12px;">
+								<h4>Focusing Energy</h4>
+							</div>
+							<h1><span id="Focusing Energy" class="PVmonitor" data-pv="SIOC:SYS1:ML00:CALCOUT051"></span></h1>
+						</div>
+						<div class="span3">
+							<div class="page-header" style="padding-bottom:2px; margin-bottom:12px;">
+								<h4>Object Plane</h4>
+							</div>
+							<h1><span id="objectplane" class="PVmonitor" data-pv="SIOC:SYS1:ML00:CALCOUT052"></span></h1>
+						</div>
+						<div class="span3">
+							<div class="page-header" style="padding-bottom:2px; margin-bottom:12px;">
+								<h4>Image Plane</h4>
+							</div>
+							<h1><span id="imageplane" class="PVmonitor" data-pv="SIOC:SYS1:ML00:CALCOUT053" data-units=""></span></h1>
+						</div>
+					</div>
+					<div class="row">
+						<div class="span3">
+							<div class="page-header" style="padding-bottom:2px; margin-bottom:12px;">
+								<h4>M12</h4>
+							</div>
+							<h1><span id="m12" class="PVmonitor" data-pv="SIOC:SYS1:ML00:CALCOUT054"></span></h1>
+						</div>
+						<div class="span3">
+							<div class="page-header" style="padding-bottom:2px; margin-bottom:12px;">
+								<h4>M34</h4>
+							</div>
+							<h1><span id="m34" class="PVmonitor" data-pv="SIOC:SYS1:ML00:CALCOUT055"></span></h1>
+						</div>
+						<div class="span3">
+							<div class="page-header" style="padding-bottom:2px; margin-bottom:12px;">
+								<h4>Image Plane</h4>
+							</div>
+							<h1><span id="dipoleenergy" class="PVmonitor" data-pv="LI20:LGPS:3330:BDES" data-units=""></span></h1>
 						</div>
 					</div>
 					
@@ -191,9 +257,9 @@
 						<h1>24 Hour Bunch Charge History</h1>
 					</div>
 					<script>
-						var margin = {top: 10, right: 30, bottom: 30, left: 140};
+						var margin = {top: 10, right: 30, bottom: 30, left: 60};
 						var width = document.getElementById('history').offsetWidth - margin.left - margin.right;
-						var height = 180 - margin.top - margin.bottom;
+						var height = 180 * 10 - margin.top - margin.bottom;
 						
 						var x = d3.time.scale().range([0,width]);
 						
