@@ -46,6 +46,7 @@ div.cell-label {
     width: 25%;
     height: auto;
     padding-top: 25px;
+    padding-right: 30px;
 }
 
 .graph-label
