@@ -484,7 +484,7 @@
 					function getGDETData() {
 						var my_fixed_formatter = d3.format("0.1f");
 						var now = new Date();
-						var oneDayAgo = new Date(now - 60*60*1200*1000); // changed from 24 (1 day) to 1200 (50 days)
+						var oneDayAgo = new Date(now - 60*60*1440*1000); // changed from 24 (1 day) to 1440 (60 days)
 						var url = 'https://aosd.slac.stanford.edu/facetarchiver/retrieval/data/getDataForPVs.json?pv=mean_90(TORO:IN10:431:TMIT_PC)&pv=mean_90(TORO:LI14:890:TMIT_PC)&pv=mean_90(TORO:LI20:2452:TMIT_PC)' +
 									'&from=' + oneDayAgo.toISOString() +
 									'&to=' + now.toISOString();
@@ -576,7 +576,7 @@
 			</div><!--graph row end	-->
 		</div><!-- container end -->
 	</body>
-  <script src="socket/webPV-Socket.js"></script>
+  	<script src="socket/webPV-Socket.js"></script>
 	<!-- <script src="socket/webcud-socket.js"></script> -->
 	<script src="facetcud-socket.js"></script>
 	<script src="socket/facet-index.html"></script>
