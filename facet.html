@@ -239,17 +239,7 @@
 						<h1 id="programHeader">Scheduled Program</h1>
 						
 					</div>
-					<!--
-					<div class="row program" id="program-template">
-						<div class="col-xs-12 col-sm-12 col-md-12 inner">
-							<div class="row innerprogrow">
-								<div class="col-xs-3 col-sm-3 col-md-2 progtime"><h3>Now</h3></div>
-								<div class="col-xs-9 col-sm-9 col-md-3 proginfo"><h3>Hello</h3></div>
-								<div class="col-xs-9 col-sm-9 col-md-3 proginfo"><h3>Another One</h3></div>
-							</div>
-						</div>
-					</div>
-					-->
+
 				<div id="program"></div>
 				<div id="lastUpdated"></div>
 				<div id="noEvents" class="h3"></div>
@@ -259,7 +249,7 @@
 				<script>
 					const dateFormatter = d3.timeFormat("%b %d %H:%M"); 
 					function getProgramInfo() {
-						fetch('https://aosd.slac.stanford.edu/program_calendar/facet/timetable/?start_time=2026-07-01T06:00:00-07:00').then((response) => {
+						fetch('https://aosd.slac.stanford.edu/program_calendar/facet/timetable/?machine=NC&limit=3').then((response) => {
 							if (!response.ok) {
 								throw new Error("HTTP Error while fetching program data: " + response.status);
 							}
@@ -314,7 +304,6 @@
 										  {
 											return emptyString;
 										  }
-										  //return startDateString + " - " + endDateString;
 									  });
 									  return inner_prog_row;
 								},
@@ -366,40 +355,9 @@
 										  {
 											return emptyString;
 										  }
-										  //return startDateString + " - " + endDateString;
 									  });
 									  return inner_prog_row;
 								},
-								  /*function(enter){
-									  var prog_info_div = enter.append("div")
-										.classed("col-xs-9 col-sm-9 col-md-3 proginfo", true);
-										
-									  prog_info_div.append("h3")
-										.text(function(d, i, nodes) {
-												return d['proginfo'];
-										}).append("span")
-											  .classed("",true)
-											  .style("background-color", function(d) {
-												  return null;
-											  })
-											  .style("padding", "0px 3px 0px 3px")
-											  .style("border-radius", "7px")
-											  .style("color", function(d) {
-												  return null;
-											  })
-											  .text(function(d) {
-												  return null;
-											  });
-										prog_info_div.append("span")
-											.classed("config", true)
-											.text(function(d){
-												if (d['config'] !== null) {
-													return d['config'];
-												}
-												return null;
-											});
-										return prog_info_div;
-									  	},*/
 									  function(update){
 										  update.select("div.innerprogrow div.proginfo").selectAll("h3")
 											.text(function(d, i, nodes) {
@@ -476,6 +434,8 @@
 							x_accessor: 'date',
 							y_accessor: 'val',
 							min_y: 0,
+							max_y: 2000,
+							yax_count: 5,
 							area: true,
 							yax_format: gdetFormatter
 						};
@@ -484,7 +444,7 @@
 					function getGDETData() {
 						var my_fixed_formatter = d3.format("0.1f");
 						var now = new Date();
-						var oneDayAgo = new Date(now - 60*60*1440*1000); // changed from 24 (1 day) to 1440 (60 days)
+						var oneDayAgo = new Date(now - 60*60*24*1000); // 24 (1 day)
 						var url = 'https://aosd.slac.stanford.edu/facetarchiver/retrieval/data/getDataForPVs.json?pv=mean_90(TORO:IN10:431:TMIT_PC)&pv=mean_90(TORO:LI14:890:TMIT_PC)&pv=mean_90(TORO:LI20:2452:TMIT_PC)' +
 									'&from=' + oneDayAgo.toISOString() +
 									'&to=' + now.toISOString();
@@ -519,58 +479,6 @@
 					setInterval(function() { getGDETData(); }, 120000);
 				</script>
 
-					<!-- <script>
-                        var fixed_formatter = d3.format("1.0f");
-                        function gdetFormatter(num) {
-                          console.log(fixed_formatter(num) + "pC");
-                          return fixed_formatter(num) + "pC";
-                        }
-                        var gdet_plot_params = {
-                            width: 800,
-                            full_width: true,
-                            top: 10,
-                            left: 70,
-                            y_extended_ticks: true,
-                            axes_not_compact: true,
-                            height: 160,
-                            target: '#gdethistory',
-                            x_accessor: 'date',
-                            y_accessor: 'val',
-                            min_y: 0,
-                            area: true,
-                            yax_format: gdetFormatter
-                        };
-                        function getGDETData() {
-                            var my_fixed_formatter = d3.format("0.1f");
-                            var now = new Date();
-                            var oneDayAgo = new Date(now - 60*60*1440*1000); //changed from 24 (1 day) to 1440 (60 days)
-							var url = 'https://aosd.slac.stanford.edu/facetarchiver/retrieval/data/getDataForPVs.json?pv=mean_90(TORO:IN10:431:TMIT_PC)&pv=mean_90(TORO:LI14:890:TMIT_PC)&pv-mean_90(TORO:LI20:2452:TMIT_PC)'
-							
-                            fetch(url +'&from='+oneDayAgo.toISOString()+'&to='+now.toISOString()).then((response) => {
-                                if (!response.ok) {
-                                    throw new Error("HTTP Error while fetching history data: " + response.status);
-                                }
-                                return response.json();
-                            }).then((data) => {
-								var gdet_time_series = data[0].data.map(function(item) {
-                                    return {"date": new Date(item.secs * 1000), "val": item.val};
-                                });
-                                var ipk_time_series = data[1].data.map(function(item) {
-                                    return {"date": new Date(item.secs * 1000), "val": item.val};
-                                });
-                                gdet_plot_params.data = gdet_time_series;
-                                gdet_plot_params.min_x = gdet_time_series[0].date;
-                                MG.data_graphic(gdet_plot_params);
-                            }).catch((error) => {
-                               console.log("Failed to parse history data: " + error.message); 
-                            });
-							
-							
-                        };
-                        getGDETData();
-                        setInterval(function() { getGDETData(); }, 120000);
-
-					</script> -->
 				</div>
 
 			</div><!--graph row end	-->
